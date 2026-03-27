@@ -23,10 +23,9 @@ var (
 func main() {
 	r := mux.NewRouter()
 
-	// === Book Routes ===
 	r.HandleFunc("/books", getBooks).Methods("GET")
 	r.HandleFunc("/books", createBook).Methods("POST")
-	r.HandleFunc("/books/{id}", getBook).Methods("GET")
+	r.HandleFunc("/books/{id}", getBookByID).Methods("GET")
 	r.HandleFunc("/books/{id}", updateBook).Methods("PUT")
 	r.HandleFunc("/books/{id}", deleteBook).Methods("DELETE")
 
@@ -36,6 +35,6 @@ func main() {
 	r.HandleFunc("/categories", getCategories).Methods("GET")
 	r.HandleFunc("/categories", createCategory).Methods("POST")
 
-	log.Println("Server started on http://localhost:8080")
+	log.Println("Book Store API is running on http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
