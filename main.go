@@ -1,28 +1,16 @@
 package main
 
 import (
+	"github.com/gulnurrrrrrrrrrrrrrrrr/Online-Book-Store-API-backend/config"
+	"github.com/gulnurrrrrrrrrrrrrrrrr/Online-Book-Store-API-backend/routes"
 	"log"
-	"net/http"
-
-	"github.com/gorilla/mux"
-	"github.com/gulnurrrrrrrrrrrrrrrrr/Online-Book-Store-API-backend/handlers"
 )
 
 func main() {
-	r := mux.NewRouter()
+	config.ConnectDatabase()
 
-	r.HandleFunc("/books", handlers.GetBooks).Methods("GET")
-	r.HandleFunc("/books", handlers.CreateBook).Methods("POST")
-	r.HandleFunc("/books/{id}", handlers.GetBookByID).Methods("GET")
-	r.HandleFunc("/books/{id}", handlers.UpdateBook).Methods("PUT")
-	r.HandleFunc("/books/{id}", handlers.DeleteBook).Methods("DELETE")
+	r := routes.SetupRouter()
 
-	r.HandleFunc("/authors", handlers.GetAuthors).Methods("GET")
-	r.HandleFunc("/authors", handlers.CreateAuthor).Methods("POST")
-
-	r.HandleFunc("/categories", handlers.GetCategories).Methods("GET")
-	r.HandleFunc("/categories", handlers.CreateCategory).Methods("POST")
-
-	log.Println("Book Store API is running on http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", r))
+	log.Println("Online Book Store API is running on http://localhost:8080")
+	log.Fatal(r.Run(":8080"))
 }

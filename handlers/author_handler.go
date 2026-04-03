@@ -1,42 +1,25 @@
 package handlers
 
 import (
-	"encoding/json"
+	"github.com/gulnurrrrrrrrrrrrrrrrr/Online-Book-Store-API-backend/config"
+	"github.com/gulnurrrrrrrrrrrrrrrrr/Online-Book-Store-API-backend/models"
 	"net/http"
 
-	"github.com/gulnurrrrrrrrrrrrrrrrr/Online-Book-Store-API-backend/models"
+	"github.com/gin-gonic/gin"
 )
 
-var authors = make(map[int]models.Author)
-var nextAuthorID = 1
-
-func GetAuthors(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
-	var authorList []models.Author
-	for _, author := range authors {
-		authorList = append(authorList, author)
-	}
-
-	json.NewEncoder(w).Encode(authorList)
+func GetAuthors(c *gin.Context) {
+	var authors []models.Author
+	config.DB.Find(&authors)
+	c.JSON(http.StatusOK, authors)
 }
 
-func CreateAuthor(w http.ResponseWriter, r *http.Request) {
+func CreateAuthor(c *gin.Context) {
 	var author models.Author
-	if err := json.NewDecoder(r.Body).Decode(&author); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+	if err := c.ShouldBindJSON(&author); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	if author.Name == "" {
-		http.Error(w, "Author name is required", http.StatusBadRequest)
-		return
-	}
-
-	author.ID = nextAuthorID
-	nextAuthorID++
-	authors[author.ID] = author
-
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(author)
+	config.DB.Create(&author)
+	c.JSON(http.StatusCreated, author)
 }
