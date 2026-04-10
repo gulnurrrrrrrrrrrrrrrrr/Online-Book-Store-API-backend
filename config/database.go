@@ -2,10 +2,11 @@ package config
 
 import (
 	"fmt"
+	"log"
+
 	"github.com/gulnurrrrrrrrrrrrrrrrr/Online-Book-Store-API-backend/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"log"
 )
 
 var DB *gorm.DB
@@ -19,10 +20,10 @@ func ConnectDatabase() {
 		log.Fatal("Failed to connect to PostgreSQL:", err)
 	}
 
-	err = DB.AutoMigrate(&models.Book{}, &models.Author{}, &models.Category{})
+	err = DB.AutoMigrate(&models.Book{}, &models.Author{}, &models.Category{}, &models.User{})
 	if err != nil {
 		log.Fatal("Migration error:", err)
 	}
 
-	fmt.Println("✅ Connected to PostgreSQL with GORM")
+	fmt.Println("Connected to PostgreSQL with GORM")
 }

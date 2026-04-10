@@ -1,12 +1,17 @@
 package main
 
 import (
+	"log"
+
 	"github.com/gulnurrrrrrrrrrrrrrrrr/Online-Book-Store-API-backend/config"
 	"github.com/gulnurrrrrrrrrrrrrrrrr/Online-Book-Store-API-backend/routes"
-	"log"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found, using system environment")
+	}
 	config.ConnectDatabase()
 
 	r := routes.SetupRouter()
