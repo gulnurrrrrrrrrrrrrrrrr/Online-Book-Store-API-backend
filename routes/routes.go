@@ -12,21 +12,25 @@ func SetupRouter() *gin.Engine {
 	r.POST("/register", handlers.Register)
 	r.POST("/login", handlers.Login)
 
-	protected := r.Group("/")
+	protected := r.Group("/api")
 	protected.Use(auth.AuthMiddleware())
 	{
-		r.GET("/books", handlers.GetBooks)
-		r.POST("/books", handlers.CreateBook)
-		r.GET("/books/:id", handlers.GetBookByID)
-		r.PUT("/books/:id", handlers.UpdateBook)
-		r.DELETE("/books/:id", handlers.DeleteBook)
-		r.GET("/books/search", handlers.SearchBooks)
+		protected.GET("/favorites", handlers.GetFavorites)
+		protected.POST("/favorites/:bookID", handlers.AddToFavorites)
+		protected.DELETE("/favorites/:bookID", handlers.RemoveFromFavorites)
 
-		r.GET("/authors", handlers.GetAuthors)
-		r.POST("/authors", handlers.CreateAuthor)
+		protected.GET("/books", handlers.GetBooks)
+		protected.POST("/books", handlers.CreateBook)
+		protected.GET("/books/search", handlers.SearchBooks)
+		protected.GET("/books/:id", handlers.GetBookByID)
+		protected.PUT("/books/:id", handlers.UpdateBook)
+		protected.DELETE("/books/:id", handlers.DeleteBook)
 
-		r.GET("/categories", handlers.GetCategories)
-		r.POST("/categories", handlers.CreateCategory)
+		protected.GET("/authors", handlers.GetAuthors)
+		protected.POST("/authors", handlers.CreateAuthor)
+		protected.GET("/categories", handlers.GetCategories)
+		protected.POST("/categories", handlers.CreateCategory)
 	}
+
 	return r
 }

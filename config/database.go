@@ -20,7 +20,7 @@ func ConnectDatabase() {
 		log.Fatal("Failed to connect to PostgreSQL:", err)
 	}
 
-	err = DB.AutoMigrate(&models.Book{}, &models.Author{}, &models.Category{}, &models.User{})
+	err = DB.AutoMigrate(&models.Book{}, &models.Author{}, &models.Category{}, &models.User{}, &models.Favorite{})
 	if err != nil {
 		log.Fatal("Migration error:", err)
 	}
